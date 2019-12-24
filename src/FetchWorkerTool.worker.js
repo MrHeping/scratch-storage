@@ -46,6 +46,31 @@ const onMessage = ({data: job}) => {
         registerStep();
     }
 
+    var fetch = (url, options) => {
+    
+        return new Promise((resolve, reject) => {
+            const request = new XMLHttpRequest();
+            request.open(options.method, url, true);
+            request.responseType = 'arraybuffer';
+    
+            request.onload = (event) => {
+                var arrayBuffer = request.response;
+                if(arrayBuffer) {
+                  resolve({
+                    arrayBuffer: () => {
+                      return arrayBuffer
+                    }
+                  })
+                } else {
+                  reject('fail')
+                }
+            };
+    
+            request.send();
+        });
+    }
+    
+
     jobsActive++;
 
     fetch(job.url, job.options)
